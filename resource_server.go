@@ -57,6 +57,9 @@ func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
+	// d.SetId("") is automatically called assuming delete returns no errors, but
+	// it is added here for explicitness.
+	d.SetId("")
 	return nil
 }
 
