@@ -12,12 +12,9 @@
 *.out
 
 # build
-terraform-provider-wordpress
+terraform-provider-twilio
 
 # terraform
 .terraform
 terraform.tfstate
 terraform.tfstate.backup
-
-# wordpress
-.data

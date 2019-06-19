@@ -1,4 +1,4 @@
-module github.com/mpon/terraform-provider-wordpress
+module github.com/mpon/terraform-provider-twilio
 
 go 1.12
 
