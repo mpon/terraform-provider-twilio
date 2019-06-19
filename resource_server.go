@@ -21,6 +21,8 @@ func resourceServer() *schema.Resource {
 }
 
 func resourceServerCreate(d *schema.ResourceData, m interface{}) error {
+	address := d.Get("address").(string)
+	d.SetId(address)
 	return resourceServerRead(d, m)
 }
 
