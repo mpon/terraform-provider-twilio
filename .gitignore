@@ -13,3 +13,6 @@
 
 # build
 terraform-provider-httpbin
+
+# terraform
+.terraform
