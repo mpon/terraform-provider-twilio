@@ -1,4 +1,4 @@
-module github.com/mpon/terraform-provider-httpbin
+module github.com/mpon/terraform-provider-wordpress
 
 go 1.12
 

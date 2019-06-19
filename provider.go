@@ -8,7 +8,7 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		ResourcesMap: map[string]*schema.Resource{
-			"httpbin_server": resourceServer(),
+			"wordpress_server": resourceServer(),
 		},
 	}
 }

@@ -1,1 +1,1 @@
-# terraform-provider-httpbin
+# terraform-provider-wordpress
