@@ -7,6 +7,8 @@ import (
 // Provider is the root of terraform provider plugin
 func Provider() *schema.Provider {
 	return &schema.Provider{
-		ResourcesMap: map[string]*schema.Resource{},
+		ResourcesMap: map[string]*schema.Resource{
+			"example_server": resourceServer(),
+		},
 	}
 }
