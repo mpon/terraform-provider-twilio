@@ -1,3 +1,3 @@
-resource "twilio_server" "get" {
-    address = "5.6.7.11"
+resource "twilio_chat_service" "test" {
+    friendly_name = "test"
 }

@@ -8,7 +8,7 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		ResourcesMap: map[string]*schema.Resource{
-			"twilio_server": resourceServer(),
+			"twilio_chat_service": resourceTwilioChatService(),
 		},
 	}
 }
