@@ -1,4 +1,4 @@
-GO111MODULE=on
+export GO111MODULE=on
 
 build:
 	go build -o terraform-provider-twilio
