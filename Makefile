@@ -7,8 +7,11 @@ plan: build
 	terraform init
 	terraform plan
 
-apply:
+apply: plan
 	terraform apply
+
+tidy:
+	go mod tidy
 
 update:
 	go get -u

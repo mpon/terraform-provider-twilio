@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net/url"
 
 	"github.com/hashicorp/terraform/helper/schema"
 )
@@ -22,11 +23,25 @@ func resourceTwilioChatService() *schema.Resource {
 	}
 }
 
+// TwilioChatService represents Twilio Chat Service
+type TwilioChatService struct {
+	Sid string `json:"sid"`
+}
+
 func resourceTwilioChatServiceCreate(d *schema.ResourceData, m interface{}) error {
-	friendlyName := d.Get("friendly_name")
-	// TODO: after creating resource, get the SID and set ID
-	sid := "ISexample"
-	fmt.Println(friendlyName)
+	friendlyName := d.Get("friendly_name").(string)
+	client := m.(*TwilioClient)
+	val := url.Values{
+		"FriendlyName": {friendlyName},
+	}
+	output := TwilioChatService{}
+	err := client.post("https://chat.twilio.com/v2/Services", val, &output)
+	if err != nil {
+		log.Println(err.Error())
+		return err
+	}
+	sid := output.Sid
+	log.Println("sid:", sid)
 	d.SetId(sid)
 	return resourceTwilioChatServiceRead(d, m)
 }
