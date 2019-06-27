@@ -3,6 +3,9 @@ export GO111MODULE=on
 build:
 	go build -o terraform-provider-twilio
 
+test:
+	go test -v ./twilio/...
+
 plan: build
 	terraform init
 	terraform plan
@@ -10,8 +13,4 @@ plan: build
 apply: plan
 	terraform apply
 
-tidy:
-	go mod tidy
-
-update:
-	go get -u
+.PHONY: build test plan apply
