@@ -2,6 +2,7 @@ package twilio
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"io/ioutil"
 	"log"
@@ -52,6 +53,27 @@ func (client *Client) postRequest(endPoint string, params url.Values, out interf
 		return err
 	}
 	return json.Unmarshal(body, &out)
+}
+
+func (client *Client) deleteRequest(endPoint string) error {
+	req, err := client.createRequest(endPoint, "DELETE", nil)
+	if err != nil {
+		log.Println("create request error", err.Error())
+		return err
+	}
+
+	resp, err := client.HTTPClient.Do(req)
+	if err != nil {
+		log.Println("response error", err.Error())
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusNoContent {
+		log.Println("status code error", resp)
+		return errors.New("failed delete request")
+	}
+	return nil
 }
 
 func (client *Client) createRequest(endPoint string, method string, params url.Values) (*http.Request, error) {

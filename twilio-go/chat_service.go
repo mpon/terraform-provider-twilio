@@ -96,3 +96,8 @@ func (client *Client) GetChatService(sid string, out interface{}) error {
 	endPoint := fmt.Sprintf("%s/Services/%s", client.chatBaseURL, sid)
 	return client.getRequest(endPoint, out)
 }
+
+func (client *Client) DeleteChatService(sid string) error {
+	endPoint := fmt.Sprintf("%s/Services/%s", client.chatBaseURL, sid)
+	return client.deleteRequest(endPoint)
+}

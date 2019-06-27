@@ -35,8 +35,7 @@ func resourceTwilioChatServiceCreate(d *schema.ResourceData, m interface{}) erro
 		"FriendlyName": {friendlyName},
 	}
 	output := twilio.ChatService{}
-	err := client.CreateChatService(params, &output)
-	if err != nil {
+	if err := client.CreateChatService(params, &output); err != nil {
 		log.Println(err.Error())
 		return err
 	}
@@ -48,8 +47,7 @@ func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error 
 	sid := d.Id()
 	client := m.(*twilio.Client)
 	output := twilio.ChatService{}
-	err := client.GetChatService(sid, &output)
-	if err != nil {
+	if err := client.GetChatService(sid, &output); err != nil {
 		log.Println(err.Error())
 		return err
 	}
@@ -63,5 +61,24 @@ func resourceTwilioChatServiceUpdate(d *schema.ResourceData, m interface{}) erro
 }
 
 func resourceTwilioChatServiceDelete(d *schema.ResourceData, m interface{}) error {
+	sid := d.Id()
+	client := m.(*twilio.Client)
+	output := twilio.ChatService{}
+	if err := client.GetChatService(sid, &output); err != nil {
+		log.Println(err.Error())
+		return err
+	}
+
+	if output.Sid == "" {
+		log.Println("chat service does not exist")
+		d.SetId("")
+		return nil
+	}
+
+	if err := client.DeleteChatService(sid); err != nil {
+		log.Println(err.Error())
+		return err
+	}
+	d.SetId("")
 	return nil
 }
