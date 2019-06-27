@@ -4,6 +4,7 @@ import (
 	"github.com/hashicorp/go-cleanhttp"
 	"github.com/hashicorp/terraform/helper/logging"
 	"github.com/hashicorp/terraform/helper/schema"
+	twilio "github.com/mpon/terraform-provider-twilio/twilio-go"
 )
 
 // Provider is the root of terraform provider plugin
@@ -29,7 +30,7 @@ func Provider() *schema.Provider {
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	client := NewTwilioClient(
+	client := twilio.NewClient(
 		d.Get("account_sid").(string),
 		d.Get("auth_token").(string),
 	)
