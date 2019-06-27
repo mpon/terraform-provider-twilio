@@ -10,7 +10,7 @@ import (
 type ChatService struct {
 	Sid                          string             `json:"sid"`
 	AccountSid                   string             `json:"account_sid"`
-	ConsumptionReportInterval    int           		`json:"consumption_report_interval"`
+	ConsumptionReportInterval    int                `json:"consumption_report_interval"`
 	DateCreated                  string             `json:"date_created"`
 	DateUpdated                  string             `json:"date_updated"`
 	DefaultChannelCreatorRoleSid string             `json:"default_channel_creator_role_sid"`
@@ -38,7 +38,7 @@ type ChatServiceLimit struct {
 }
 
 type ChatServiceMedia struct {
-	SizeLimitMb          int `json:"size_limit_mb"`
+	SizeLimitMb          int    `json:"size_limit_mb"`
 	CompatibilityMessage string `json:"compatibility_message"`
 }
 

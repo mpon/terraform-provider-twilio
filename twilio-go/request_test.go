@@ -5,11 +5,10 @@ import (
 	"testing"
 )
 
-
 func TestCreatePostRequest(t *testing.T) {
 	c := Client{
 		accountSid: "accountSid",
-		authToken: "authToken",
+		authToken:  "authToken",
 	}
 	params := url.Values{
 		"key1": {"value1"},
@@ -35,7 +34,6 @@ func TestCreatePostRequest(t *testing.T) {
 		t.Fatal("Content Type is not set")
 	}
 
-
 	if req.FormValue("key1") != "value1" {
 		t.Fatalf("form value is not set")
 	}
@@ -44,7 +42,7 @@ func TestCreatePostRequest(t *testing.T) {
 func TestCreateGetRequest(t *testing.T) {
 	c := Client{
 		accountSid: "accountSid",
-		authToken: "authToken",
+		authToken:  "authToken",
 	}
 	req, err := c.createRequest("https://host/path", "GET", nil)
 
@@ -71,7 +69,7 @@ func TestCreateGetRequest(t *testing.T) {
 func TestDeleteGetRequest(t *testing.T) {
 	c := Client{
 		accountSid: "accountSid",
-		authToken: "authToken",
+		authToken:  "authToken",
 	}
 	req, err := c.createRequest("https://host/path", "DELETE", nil)
 

@@ -21,22 +21,22 @@ func resourceTwilioChatService() *schema.Resource {
 				Required: true,
 			},
 			"account_sid": &schema.Schema{
-				Type: schema.TypeString,
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"limits": {
-				Type: schema.TypeMap,
+				Type:     schema.TypeMap,
 				Optional: true,
 				Computed: true,
 				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema {
+					Schema: map[string]*schema.Schema{
 						"channel_members": {
-							Type: schema.TypeInt,
+							Type:     schema.TypeInt,
 							Optional: true,
 							Computed: true,
 						},
 						"user_channels": {
-							Type: schema.TypeInt,
+							Type:     schema.TypeInt,
 							Optional: true,
 							Computed: true,
 						},

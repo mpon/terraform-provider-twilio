@@ -1,9 +1,12 @@
 export GO111MODULE=on
 
-build:
+fmt:
+	go fmt ./...
+
+build: fmt
 	go build -o terraform-provider-twilio
 
-test:
+test: fmt
 	go test -v ./...
 
 plan: build
@@ -13,4 +16,4 @@ plan: build
 apply: plan
 	terraform apply
 
-.PHONY: build test plan apply
+.PHONY: fmt build test plan apply
