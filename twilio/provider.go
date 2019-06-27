@@ -1,4 +1,4 @@
-package main
+package twilio
 
 import (
 	"github.com/hashicorp/go-cleanhttp"

@@ -1,4 +1,7 @@
-provider "twilio" {}
+provider "twilio" {
+    # account_sid = ""
+    # auth_token = ""
+}
 
 
 resource "twilio_chat_service" "test" {
