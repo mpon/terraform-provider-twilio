@@ -57,6 +57,30 @@ func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error 
 }
 
 func resourceTwilioChatServiceUpdate(d *schema.ResourceData, m interface{}) error {
+	sid := d.Id()
+	client := m.(*twilio.Client)
+	output := twilio.ChatService{}
+	if err := client.GetChatService(sid, &output); err != nil {
+		log.Println(err.Error())
+		return err
+	}
+
+	if output.Sid == "" {
+		log.Println("chat service does not exist")
+		d.SetId("")
+		return nil
+	}
+
+	var params = url.Values{}
+	if d.HasChange("friendly_name") {
+		params.Add("FriendlyName", d.Get("friendly_name").(string))
+	}
+
+	updated := twilio.ChatService{}
+	if err := client.UpdateChatService(sid, params, updated); err != nil {
+		log.Println(err.Error())
+		return err
+	}
 	return resourceTwilioChatServiceRead(d, m)
 }
 

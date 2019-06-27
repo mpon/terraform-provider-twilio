@@ -85,16 +85,21 @@ func (s ChatWebhookEvent) ToString() string {
 	}
 }
 
+// GetChatService retrieve a chat service
+func (client *Client) GetChatService(sid string, out interface{}) error {
+	endPoint := fmt.Sprintf("%s/Services/%s", client.chatBaseURL, sid)
+	return client.getRequest(endPoint, out)
+}
+
 // CreateChatService creates chat service
 func (client *Client) CreateChatService(params url.Values, out interface{}) error {
 	endPoint := fmt.Sprintf("%s/Services", client.chatBaseURL)
 	return client.postRequest(endPoint, params, out)
 }
 
-// GetChatService retrieve a chat service
-func (client *Client) GetChatService(sid string, out interface{}) error {
+func (client *Client) UpdateChatService(sid string, params url.Values, out interface{}) error {
 	endPoint := fmt.Sprintf("%s/Services/%s", client.chatBaseURL, sid)
-	return client.getRequest(endPoint, out)
+	return client.postRequest(endPoint, params, out)
 }
 
 func (client *Client) DeleteChatService(sid string) error {
