@@ -1,0 +1,43 @@
+package twilio
+
+import (
+	"net/url"
+	"testing"
+)
+
+
+func TestCreateRequest(t *testing.T) {
+	c := Client{
+		accountSid: "accountSid",
+		authToken: "authToken",
+	}
+	params := url.Values{
+		"key1": {"value1"},
+	}
+	req, err := c.createRequest("https://host/path", params)
+
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
+
+	if username, password, ok := req.BasicAuth(); ok {
+		if username != "accountSid" {
+			t.Fatal("username is not accountSid")
+		}
+		if password != "authToken" {
+			t.Fatal("password is not authToken")
+		}
+	} else {
+		t.Fatal("basic auth is not got")
+	}
+
+	if req.Header.Get("Content-Type") != "application/x-www-form-urlencoded" {
+		t.Fatal("Content Type is not set")
+	}
+
+
+	if req.FormValue("key1") != "value1" {
+		t.Fatalf("form value is not set")
+	}
+
+}
