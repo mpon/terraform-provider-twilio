@@ -4,7 +4,7 @@ build:
 	go build -o terraform-provider-twilio
 
 test:
-	go test -v ./twilio/...
+	go test -v ./...
 
 plan: build
 	terraform init

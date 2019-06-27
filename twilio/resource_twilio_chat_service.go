@@ -27,18 +27,16 @@ func resourceTwilioChatService() *schema.Resource {
 func resourceTwilioChatServiceCreate(d *schema.ResourceData, m interface{}) error {
 	friendlyName := d.Get("friendly_name").(string)
 	client := m.(*twilio.Client)
-	val := url.Values{
+	params := url.Values{
 		"FriendlyName": {friendlyName},
 	}
 	output := twilio.ChatService{}
-	err := client.CreateChatService(val, &output)
+	err := client.CreateChatService(params, &output)
 	if err != nil {
 		log.Println(err.Error())
 		return err
 	}
-	sid := output.Sid
-	log.Println("sid:", sid)
-	d.SetId(sid)
+	d.SetId(output.Sid)
 	return resourceTwilioChatServiceRead(d, m)
 }
 
