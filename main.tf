@@ -5,5 +5,5 @@ provider "twilio" {
 
 
 resource "twilio_chat_service" "test" {
-    friendly_name = "test10"
+    friendly_name = "test14"
 }

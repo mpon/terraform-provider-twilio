@@ -1,6 +1,7 @@
 package twilio
 
 import (
+	"fmt"
 	"net/url"
 	"strings"
 )
@@ -13,7 +14,7 @@ type ChatService struct {
 	DateCreated                  string             `json:"date_created"`
 	DateUpdated                  string             `json:"date_updated"`
 	DefaultChannelCreatorRoleSid string             `json:"default_channel_creator_role_sid"`
-	DefaultChannelRoleSid        string             `json:default_channel_role_sid`
+	DefaultChannelRoleSid        string             `json:"default_channel_role_sid"`
 	DefaultServiceRoleSid        string             `json:"default_service_role_sid"`
 	FriendlyName                 string             `json:"friendly_name"`
 	Limits                       ChatServiceLimit   `json:"limits"`
@@ -86,6 +87,12 @@ func (s ChatWebhookEvent) ToString() string {
 
 // CreateChatService creates chat service
 func (client *Client) CreateChatService(params url.Values, out interface{}) error {
-	endPoint := client.chatBaseURL + "Services"
+	endPoint := fmt.Sprintf("%s/Services", client.chatBaseURL)
 	return client.postRequest(endPoint, params, out)
+}
+
+// GetChatService retrieve a chat service
+func (client *Client) GetChatService(sid string, out interface{}) error {
+	endPoint := fmt.Sprintf("%s/Services/%s", client.chatBaseURL, sid)
+	return client.getRequest(endPoint, out)
 }

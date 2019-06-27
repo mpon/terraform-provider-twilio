@@ -20,6 +20,10 @@ func resourceTwilioChatService() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"account_sid": &schema.Schema{
+				Type: schema.TypeString,
+				Computed: true,
+			},
 		},
 	}
 }
@@ -41,6 +45,16 @@ func resourceTwilioChatServiceCreate(d *schema.ResourceData, m interface{}) erro
 }
 
 func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error {
+	sid := d.Id()
+	client := m.(*twilio.Client)
+	output := twilio.ChatService{}
+	err := client.GetChatService(sid, &output)
+	if err != nil {
+		log.Println(err.Error())
+		return err
+	}
+	d.Set("account_sid", output.AccountSid)
+	d.Set("friendly_name", output.FriendlyName)
 	return nil
 }
 

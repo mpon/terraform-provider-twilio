@@ -17,7 +17,7 @@ type Client struct {
 
 // NewClient returns a new Twilio HTTP Client which can be used to access the API
 func NewClient(accountSid, authToken string) *Client {
-	chatBaseURL := "https://chat.twilio.com/v2/"
+	chatBaseURL := "https://chat.twilio.com/v2"
 
 	return &Client{
 		accountSid:   accountSid,
