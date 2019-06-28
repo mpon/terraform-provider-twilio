@@ -1,11 +1,12 @@
 package twilio
 
 import (
-	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/mpon/terraform-provider-twilio/twilio-go"
 	"log"
 	"net/url"
 	"strconv"
+
+	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/mpon/terraform-provider-twilio/twilio-go"
 )
 
 func resourceTwilioChatService() *schema.Resource {
@@ -59,6 +60,10 @@ func resourceTwilioChatServiceCreate(d *schema.ResourceData, m interface{}) erro
 		return err
 	}
 	d.SetId(output.Sid)
+	if err := resourceTwilioChatServiceUpdate(d, m); err != nil {
+		log.Println(err.Error())
+		return err
+	}
 	return resourceTwilioChatServiceRead(d, m)
 }
 
