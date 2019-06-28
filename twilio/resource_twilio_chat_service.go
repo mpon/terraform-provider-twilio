@@ -3,7 +3,6 @@ package twilio
 import (
 	"log"
 	"net/url"
-	"strconv"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/mpon/terraform-provider-twilio/twilio-go"
@@ -77,11 +76,7 @@ func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error 
 	}
 	d.Set("account_sid", output.AccountSid)
 	d.Set("friendly_name", output.FriendlyName)
-
-	limits := make(map[string]string)
-	limits["user_channels"] = strconv.Itoa(output.Limits.UserChannels)
-	limits["channel_members"] = strconv.Itoa(output.Limits.ChannelMembers)
-	d.Set("limits", limits)
+	d.Set("limits", output.Limits.ToMap())
 	return nil
 }
 

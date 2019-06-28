@@ -6,8 +6,7 @@ import (
 	"encoding/json"
 )
 
-func TestChatServiceSerialization(t *testing.T) {
-	raw := `
+const raw = `
 {
   "account_sid": "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   "consumption_report_interval": 100,
@@ -46,10 +45,26 @@ func TestChatServiceSerialization(t *testing.T) {
     "compatibility_message": "media compatibility message"
   }
 }`
+
+func TestChatServiceSerialization(t *testing.T) {
 	var chatService ChatService
 	err := json.Unmarshal([]byte(raw), &chatService)
 
 	if err != nil {
 		t.Fatalf("error: %s", err.Error())
 	}
+}
+
+func TestChatServiceLimit_ToMap(t *testing.T) {
+	var chatService ChatService
+	_ = json.Unmarshal([]byte(raw), &chatService)
+
+	if v := chatService.Limits.ToMap()["channel_members"]; v != "100" {
+		t.Fatalf("channel_members must 100, actual: %s", v)
+	}
+
+	if v := chatService.Limits.ToMap()["user_channels"]; v != "250" {
+		t.Fatalf("user_channels must 250, actual: %s", v)
+	}
+
 }

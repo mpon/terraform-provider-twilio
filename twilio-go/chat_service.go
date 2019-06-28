@@ -3,6 +3,7 @@ package twilio
 import (
 	"fmt"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -35,6 +36,13 @@ type ChatService struct {
 type ChatServiceLimit struct {
 	ChannelMembers int `json:"channel_members"`
 	UserChannels   int `json:"user_channels"`
+}
+
+func (limits ChatServiceLimit) ToMap() map[string]string {
+	return map[string]string{
+		"channel_members": strconv.Itoa(limits.ChannelMembers),
+		"user_channels":   strconv.Itoa(limits.UserChannels),
+	}
 }
 
 type ChatServiceMedia struct {

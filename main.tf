@@ -5,17 +5,17 @@ provider "twilio" {
 
 
 resource "twilio_chat_service" "test" {
-    friendly_name = "test17"
+    friendly_name = "test21"
     limits {
         channel_members = 1
-        user_channels = 1
+        user_channels = 2
     }
 }
 
 resource "twilio_chat_service" "test2" {
-    friendly_name = "test22"
+    friendly_name = "test23"
     limits {
-        channel_members = 4
-        user_channels = 5
+        channel_members = 3
+        user_channels = 4
     }
 }
