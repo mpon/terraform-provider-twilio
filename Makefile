@@ -11,6 +11,7 @@ test: fmt
 
 plan: build
 	terraform init
+	terraform fmt
 	terraform plan
 
 apply: plan
