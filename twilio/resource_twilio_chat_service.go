@@ -24,6 +24,46 @@ func resourceTwilioChatService() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"default_channel_creator_role_sid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"default_channel_role_sid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"default_service_role_sid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"pre_webhook_url": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"post_webhook_url": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"pre_webhook_retry_count": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"post_webhook_retry_count": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"webhook_method": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"webhook_filters": &schema.Schema{
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
 			"limits": {
 				Type:     schema.TypeMap,
 				Optional: true,
@@ -50,9 +90,8 @@ func resourceTwilioChatService() *schema.Resource {
 func resourceTwilioChatServiceCreate(d *schema.ResourceData, m interface{}) error {
 	friendlyName := d.Get("friendly_name").(string)
 	client := m.(*twilio.Client)
-	params := url.Values{
-		"FriendlyName": {friendlyName},
-	}
+	params := url.Values{}
+	params.Set("FriendlyName", friendlyName)
 	output := twilio.ChatService{}
 	if err := client.CreateChatService(params, &output); err != nil {
 		log.Println(err.Error())
@@ -76,6 +115,15 @@ func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error 
 	}
 	d.Set("account_sid", output.AccountSid)
 	d.Set("friendly_name", output.FriendlyName)
+	d.Set("default_channel_creator_role_sid", output.DefaultChannelCreatorRoleSid)
+	d.Set("default_channel_role_sid", output.DefaultChannelRoleSid)
+	d.Set("default_service_role_sid", output.DefaultServiceRoleSid)
+	d.Set("pre_webhook_url", output.PreWebhookUrl)
+	d.Set("post_webhook_url", output.PostWebhookUrl)
+	d.Set("pre_webhook_retry_count", output.PreWebhookRetryCount)
+	d.Set("post_webhook_retry_count", output.PostWebhookRetryCount)
+	d.Set("webhook_method", output.WebhookMethod)
+	d.Set("webhook_filters", output.WebhookFilters)
 	d.Set("limits", output.Limits.ToMap())
 	return nil
 }
@@ -96,8 +144,37 @@ func resourceTwilioChatServiceUpdate(d *schema.ResourceData, m interface{}) erro
 	}
 
 	var params = url.Values{}
-	if d.HasChange("friendly_name") {
-		params.Add("FriendlyName", d.Get("friendly_name").(string))
+	if r, ok := d.GetOk("friendly_name"); ok {
+		params.Set("FriendlyName", r.(string))
+	}
+	if r, ok := d.GetOk("default_channel_creator_role_sid"); ok {
+		params.Set("DefaultChannelCreatorRoleSid", r.(string))
+	}
+	if r, ok := d.GetOk("default_channel_role_sid"); ok {
+		params.Set("DefaultChannelRoleSid", r.(string))
+	}
+	if r, ok := d.GetOk("default_service_role_sid"); ok {
+		params.Set("DefaultServiceRoleSid", r.(string))
+	}
+	if r, ok := d.GetOk("pre_webhook_url"); ok {
+		params.Set("PreWebhookUrl", r.(string))
+	}
+	if r, ok := d.GetOk("post_webhook_url"); ok {
+		params.Set("PostWebhookUrl", r.(string))
+	}
+	if r, ok := d.GetOk("pre_webhook_retry_count"); ok {
+		params.Set("PreWebhookRetryCount", r.(string))
+	}
+	if r, ok := d.GetOk("post_webhook_retry_count"); ok {
+		params.Set("PostWebhookRetryCount", r.(string))
+	}
+	if r, ok := d.GetOk("webhook_method"); ok {
+		params.Set("WebhookMethod", r.(string))
+	}
+	if r, ok := d.GetOk("webhook_filters"); ok {
+		for _, v := range r.([]interface{}) {
+			params.Add("WebhookFilters", v.(string))
+		}
 	}
 	if r, ok := d.GetOk("limits.channel_members"); ok {
 		params.Add("Limits.ChannelMembers", r.(string))
