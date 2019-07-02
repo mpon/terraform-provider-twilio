@@ -38,3 +38,10 @@ resource "twilio_application" "test2" {
   voice_url     = "https://httpbin.org/get"
   voice_method  = "GET"
 }
+
+output "chat_service_test_sid" {
+  value = "${twilio_chat_service.test.id}"
+}
+output "application_sid" {
+  value = "${twilio_application.test2.id}"
+}
