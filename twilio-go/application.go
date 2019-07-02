@@ -18,6 +18,7 @@ type Application struct {
 	SMSFallbackURL        string `json:"sms_fallback_url"`
 	SMSMethod             string `json:"sms_method"`
 	SMSURL                string `json:"sms_url"`
+	SMSStatusCallback     string `json:"sms_status_callback"`
 	StatusCallback        string `json:"status_callback"`
 	StatusCallbackMethod  string `json:"status_callback_method"`
 	URI                   string `json:"uri"`
@@ -28,12 +29,42 @@ type Application struct {
 	VoiceURL              string `json:"voice_url"`
 }
 
-// CreateAccount creates a TwiML Application
-func (client *Client) CreateAccount(params url.Values, out interface{}) error {
+// GetApplication retrieve a TwiML Application
+func (client *Client) GetApplication(sid string, out interface{}) error {
+	u, err := url.Parse(client.applicationBaeURL)
+	if err != nil {
+		return err
+	}
+	u.Path = path.Join(u.Path, "Accounts", client.accountSid, "Applications", sid+".json")
+	return client.getRequest(u.String(), out)
+}
+
+// CreateApplication creates a TwiML Application
+func (client *Client) CreateApplication(params url.Values, out interface{}) error {
 	u, err := url.Parse(client.applicationBaeURL)
 	if err != nil {
 		return err
 	}
 	u.Path = path.Join(u.Path, "Accounts", client.accountSid, "Applications.json")
 	return client.postRequest(u.String(), params, out)
+}
+
+// UpdateApplication updates a TwiML Application
+func (client *Client) UpdateApplication(sid string, params url.Values, out interface{}) error {
+	u, err := url.Parse(client.applicationBaeURL)
+	if err != nil {
+		return err
+	}
+	u.Path = path.Join(u.Path, "Accounts", client.accountSid, "Applications", sid+".json")
+	return client.postRequest(u.String(), params, out)
+}
+
+// DeleteApplication delete a TwiML Application
+func (client *Client) DeleteApplication(sid string) error {
+	u, err := url.Parse(client.applicationBaeURL)
+	if err != nil {
+		return err
+	}
+	u.Path = path.Join(u.Path, "Accounts", client.accountSid, "Applications", sid+".json")
+	return client.deleteRequest(u.String())
 }

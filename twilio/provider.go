@@ -24,6 +24,7 @@ func Provider() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"twilio_chat_service": resourceTwilioChatService(),
+			"twilio_application":  resourceTwilioApplication(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
