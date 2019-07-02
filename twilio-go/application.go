@@ -1,5 +1,10 @@
 package twilio
 
+import (
+	"net/url"
+	"path"
+)
+
 // Application represents Twilio Application
 type Application struct {
 	AccountSid            string `json:"account_sid"`
@@ -11,6 +16,7 @@ type Application struct {
 	Sid                   string `json:"sid"`
 	SMSFallbackMethod     string `json:"sms_fallback_method"`
 	SMSFallbackURL        string `json:"sms_fallback_url"`
+	SMSMethod             string `json:"sms_method"`
 	SMSURL                string `json:"sms_url"`
 	StatusCallback        string `json:"status_callback"`
 	StatusCallbackMethod  string `json:"status_callback_method"`
@@ -20,4 +26,14 @@ type Application struct {
 	VoiceFallbackURL      string `json:"voice_fallback_url"`
 	VoiceMethod           string `json:"voice_method"`
 	VoiceURL              string `json:"voice_url"`
+}
+
+// CreateAccount creates a TwiML Application
+func (client *Client) CreateAccount(params url.Values, out interface{}) error {
+	u, err := url.Parse(client.applicationBaeURL)
+	if err != nil {
+		return err
+	}
+	u.Path = path.Join(u.Path, "Accounts", client.accountSid, "Applications.json")
+	return client.postRequest(u.String(), params, out)
 }
