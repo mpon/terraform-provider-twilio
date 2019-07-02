@@ -7,7 +7,7 @@ build: fmt
 	go build -o terraform-provider-twilio
 
 test: fmt
-	go test -v ./...
+	go test -v `go list ./... | tail -n +2`
 
 plan: build
 	terraform init
