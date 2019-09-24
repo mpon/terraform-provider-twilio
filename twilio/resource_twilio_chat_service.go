@@ -3,6 +3,7 @@ package twilio
 import (
 	"log"
 	"net/url"
+	"sort"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/mpon/terraform-provider-twilio/twilio-go"
@@ -123,6 +124,7 @@ func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error 
 	d.Set("pre_webhook_retry_count", output.PreWebhookRetryCount)
 	d.Set("post_webhook_retry_count", output.PostWebhookRetryCount)
 	d.Set("webhook_method", output.WebhookMethod)
+	sort.Strings(output.WebhookFilters)
 	d.Set("webhook_filters", output.WebhookFilters)
 	d.Set("limits", output.Limits.ToMap())
 	return nil
