@@ -3,7 +3,6 @@ package twilio
 import (
 	"log"
 	"net/url"
-	"sort"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/mpon/terraform-provider-twilio/twilio-go"
@@ -124,10 +123,33 @@ func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error 
 	d.Set("pre_webhook_retry_count", output.PreWebhookRetryCount)
 	d.Set("post_webhook_retry_count", output.PostWebhookRetryCount)
 	d.Set("webhook_method", output.WebhookMethod)
-	sort.Strings(output.WebhookFilters)
-	d.Set("webhook_filters", output.WebhookFilters)
+
+	if r, ok := d.GetOk("webhook_filters"); ok {
+		var webhookFilters []string
+		for _, v := range r.([]interface{}) {
+			webhookFilters = append(webhookFilters, v.(string))
+		}
+		for _, f := range output.WebhookFilters {
+			contains := containsWebhookFilter(webhookFilters, f)
+			if !contains {
+				webhookFilters = append(webhookFilters)
+			}
+		}
+		d.Set("webhook_filters", webhookFilters)
+	} else {
+		d.Set("webhook_filters", output.WebhookFilters)
+	}
 	d.Set("limits", output.Limits.ToMap())
 	return nil
+}
+
+func containsWebhookFilter(filters []string, filter string) bool {
+	for _, f := range filters {
+		if f == filter {
+			return true
+		}
+	}
+	return false
 }
 
 func resourceTwilioChatServiceUpdate(d *schema.ResourceData, m interface{}) error {
