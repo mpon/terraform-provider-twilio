@@ -123,33 +123,32 @@ func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error 
 	d.Set("pre_webhook_retry_count", output.PreWebhookRetryCount)
 	d.Set("post_webhook_retry_count", output.PostWebhookRetryCount)
 	d.Set("webhook_method", output.WebhookMethod)
+	d.Set("limits", output.Limits.ToMap())
 
+	// Webhook filters are different order resourceData and api response.
+	// We need to order following resourceData.
 	if r, ok := d.GetOk("webhook_filters"); ok {
-		var webhookFilters []string
-		for _, v := range r.([]interface{}) {
-			webhookFilters = append(webhookFilters, v.(string))
-		}
-		for _, f := range output.WebhookFilters {
-			contains := containsWebhookFilter(webhookFilters, f)
-			if !contains {
-				webhookFilters = append(webhookFilters)
+		data := r.([]interface{})
+		for _, v := range output.WebhookFilters {
+			if isNewWebhookFilter(data, v) {
+				data = append(data, v)
 			}
 		}
-		d.Set("webhook_filters", webhookFilters)
+		d.Set("webhook_filters", data)
 	} else {
 		d.Set("webhook_filters", output.WebhookFilters)
 	}
-	d.Set("limits", output.Limits.ToMap())
+
 	return nil
 }
 
-func containsWebhookFilter(filters []string, filter string) bool {
-	for _, f := range filters {
-		if f == filter {
-			return true
+func isNewWebhookFilter(filters []interface{}, filter string) bool {
+	for _, v := range filters {
+		if v.(string) == filter {
+			return false
 		}
 	}
-	return false
+	return true
 }
 
 func resourceTwilioChatServiceUpdate(d *schema.ResourceData, m interface{}) error {
