@@ -1,6 +1,8 @@
 provider "twilio" {
-  # account_sid = "" // You can set env variables TWILIO_ACCOUNT_SID
-  # auth_token = ""  // You can set env variables TWILIO_AUTH_TOKEN
+  /*
+  account_sid = "" // You can set env variables TWILIO_ACCOUNT_SID
+  auth_token = ""  // You can set env variables TWILIO_AUTH_TOKEN
+  */
 }
 
 resource "twilio_chat_service" "test" {
@@ -42,6 +44,7 @@ resource "twilio_application" "test2" {
 output "chat_service_test_sid" {
   value = "${twilio_chat_service.test.id}"
 }
+
 output "application_sid" {
   value = "${twilio_application.test2.id}"
 }
