@@ -125,8 +125,8 @@ func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error 
 	d.Set("webhook_method", output.WebhookMethod)
 	d.Set("limits", output.Limits.ToMap())
 
-	// Webhook filters are different order resourceData and api response.
-	// We need to order following resourceData.
+	// The webhook filter has different API response order and resource data order.
+	// So we need to match the order of the resource data.
 	if r, ok := d.GetOk("webhook_filters"); ok {
 		data := r.([]interface{})
 		for _, v := range output.WebhookFilters {
