@@ -21,3 +21,6 @@ terraform.tfstate.backup
 
 # direnv
 .envrc
+
+# IntelliJ IDEA
+.idea

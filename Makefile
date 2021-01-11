@@ -1,4 +1,5 @@
 export GO111MODULE=on
+version = 99.0.0
 
 fmt:
 	go fmt ./...
@@ -6,10 +7,17 @@ fmt:
 build: fmt
 	go build -o terraform-provider-twilio
 
-test: fmt
-	go test -v `go list ./... | tail -n +2`
+install_macos: build
+	mkdir -p ~/.terraform.d/plugins/local/mpon/twilio/$(version)/darwin_amd64
+	cp terraform-provider-twilio ~/.terraform.d/plugins/local/mpon/twilio/$(version)/darwin_amd64/terraform-provider-twilio_v$(version)
 
-plan: build
+test: fmt
+	go test -v ./...
+
+lint: fmt
+	golangci-lint run
+
+plan: install_macos
 	terraform init
 	terraform fmt
 	terraform plan

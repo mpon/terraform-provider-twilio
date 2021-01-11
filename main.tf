@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    twilio = {
+      source  = "local/mpon/twilio"
+      version = "99.0.0"
+    }
+  }
+  required_version = ">= 0.13"
+}
+
 provider "twilio" {
   /*
   account_sid = "" // You can set env variables TWILIO_ACCOUNT_SID
@@ -42,9 +52,9 @@ resource "twilio_application" "test2" {
 }
 
 output "chat_service_test_sid" {
-  value = "${twilio_chat_service.test.id}"
+  value = twilio_chat_service.test.id
 }
 
 output "application_sid" {
-  value = "${twilio_application.test2.id}"
+  value = twilio_application.test2.id
 }
