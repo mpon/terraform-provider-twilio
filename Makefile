@@ -12,7 +12,7 @@ install_macos: build
 	cp terraform-provider-twilio ~/.terraform.d/plugins/local/mpon/twilio/$(version)/darwin_amd64/terraform-provider-twilio_v$(version)
 
 test: fmt
-	go test -v `go list ./... | tail -n +2`
+	go test -v ./...
 
 plan: install_macos
 	terraform init
