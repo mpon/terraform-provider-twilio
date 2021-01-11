@@ -14,6 +14,9 @@ install_macos: build
 test: fmt
 	go test -v ./...
 
+lint: fmt
+	golangci-lint run
+
 plan: install_macos
 	terraform init
 	terraform fmt
