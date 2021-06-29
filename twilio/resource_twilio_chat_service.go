@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/url"
 
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/mpon/terraform-provider-twilio/twilio-go"
 )
 
@@ -65,7 +65,7 @@ func resourceTwilioChatService() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"limits": {
-				Type:     schema.TypeMap,
+				Type:     schema.TypeSet,
 				Optional: true,
 				Computed: true,
 				Elem: &schema.Resource{
