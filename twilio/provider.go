@@ -2,8 +2,8 @@ package twilio
 
 import (
 	"github.com/hashicorp/go-cleanhttp"
-	"github.com/hashicorp/terraform/helper/logging"
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/logging"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	twilio "github.com/mpon/terraform-provider-twilio/twilio-go"
 )
 
