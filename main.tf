@@ -18,7 +18,7 @@ provider "twilio" {
 resource "twilio_chat_service" "test" {
   friendly_name = "test21"
 
-  limits = {
+  limits {
     channel_members = 1
     user_channels   = 2
   }
@@ -39,7 +39,7 @@ resource "twilio_chat_service" "test2" {
     "onUserUpdate",
   ]
 
-  limits = {
+  limits {
     channel_members = 3
     user_channels   = 4
   }

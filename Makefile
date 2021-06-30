@@ -18,7 +18,8 @@ lint: fmt
 	golangci-lint run
 
 plan: install_macos
-	terraform init
+	rm -f .terraform.lock.hcl
+	terraform init -upgrade
 	terraform fmt
 	terraform plan
 
