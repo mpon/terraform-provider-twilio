@@ -55,15 +55,20 @@ func TestChatServiceSerialization(t *testing.T) {
 	}
 }
 
-func TestChatServiceLimit_ToMap(t *testing.T) {
+func TestChatServiceLimit_ToList(t *testing.T) {
 	var chatService ChatService
 	_ = json.Unmarshal([]byte(chatServiceRawJSON), &chatService)
+	limits, ok := chatService.Limits.ToList()[0].(map[string]interface{})
 
-	if v := chatService.Limits.ToMap()["channel_members"]; v != "100" {
+	if !ok {
+		t.Fatal("ToList member has map[string]interface")
+	}
+
+	if v := limits["channel_members"]; v != "100" {
 		t.Fatalf("channel_members must 100, actual: %s", v)
 	}
 
-	if v := chatService.Limits.ToMap()["user_channels"]; v != "250" {
+	if v := limits["user_channels"]; v != "250" {
 		t.Fatalf("user_channels must 250, actual: %s", v)
 	}
 

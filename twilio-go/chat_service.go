@@ -38,11 +38,13 @@ type ChatServiceLimit struct {
 	UserChannels   int `json:"user_channels"`
 }
 
-// ToMap returns limits property to map
-func (limits ChatServiceLimit) ToMap() map[string]string {
-	return map[string]string{
-		"channel_members": strconv.Itoa(limits.ChannelMembers),
-		"user_channels":   strconv.Itoa(limits.UserChannels),
+// ToList returns limits property to list for TypeSet schema
+func (limits ChatServiceLimit) ToList() []interface{} {
+	return []interface{}{
+		map[string]interface{}{
+			"channel_members": strconv.Itoa(limits.ChannelMembers),
+			"user_channels":   strconv.Itoa(limits.UserChannels),
+		},
 	}
 }
 

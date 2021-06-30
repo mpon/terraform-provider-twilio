@@ -1,6 +1,7 @@
 package twilio
 
 import (
+	"context"
 	"log"
 	"net/url"
 
@@ -84,6 +85,14 @@ func resourceTwilioChatService() *schema.Resource {
 				},
 			},
 		},
+		SchemaVersion: 1,
+		StateUpgraders: []schema.StateUpgrader{
+			{
+				Type:    resourceTwilioChatServiceResourceV0().CoreConfigSchema().ImpliedType(),
+				Upgrade: resourceTwilioChatServiceStateUpgradeV0,
+				Version: 0,
+			},
+		},
 	}
 }
 
@@ -123,7 +132,7 @@ func resourceTwilioChatServiceRead(d *schema.ResourceData, m interface{}) error 
 	d.Set("pre_webhook_retry_count", output.PreWebhookRetryCount)
 	d.Set("post_webhook_retry_count", output.PostWebhookRetryCount)
 	d.Set("webhook_method", output.WebhookMethod)
-	d.Set("limits", output.Limits.ToMap())
+	d.Set("limits", output.Limits.ToList())
 
 	// The webhook filter has different API response order and resource data order.
 	// So we need to match the order of the resource data.
@@ -237,4 +246,94 @@ func resourceTwilioChatServiceDelete(d *schema.ResourceData, m interface{}) erro
 	}
 	d.SetId("")
 	return nil
+}
+
+func resourceTwilioChatServiceResourceV0() *schema.Resource {
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"friendly_name": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"account_sid": &schema.Schema{
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"default_channel_creator_role_sid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"default_channel_role_sid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"default_service_role_sid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"pre_webhook_url": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"post_webhook_url": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"pre_webhook_retry_count": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"post_webhook_retry_count": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"webhook_method": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"webhook_filters": &schema.Schema{
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"limits": {
+				Type:     schema.TypeMap,
+				Optional: true,
+				Computed: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"channel_members": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							Computed: true,
+						},
+						"user_channels": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							Computed: true,
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func resourceTwilioChatServiceStateUpgradeV0(r_ context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
+	if rawStateLimits, ok := rawState["limits"].(map[string]interface{}); ok {
+		channelMembers := rawStateLimits["channel_members"]
+		userChannels := rawStateLimits["user_channels"]
+		limits := []interface{}{
+			map[string]interface{}{
+				"channel_members": channelMembers,
+				"user_channels":   userChannels,
+			},
+		}
+		rawState["limits"] = limits
+	}
+
+	return rawState, nil
 }
